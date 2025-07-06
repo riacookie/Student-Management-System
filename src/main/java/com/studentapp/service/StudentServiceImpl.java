@@ -61,6 +61,6 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public List<Student> getAllStudents() {
-		return Collections.unmodifiableList(studentList);
+		return new ArrayList<>(studentList);
 	}
 }
