@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 	private final List<Student> studentList;
 	private static final int MAX_STUDENTS = 100;
-
 	public StudentServiceImpl() {
 		this.studentList = new ArrayList<>();
 	}

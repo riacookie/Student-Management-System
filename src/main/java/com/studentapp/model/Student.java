@@ -42,9 +42,6 @@ public class Student extends Person {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
 		Student student = (Student) obj;
-		return Double.compare(student.gpa, gpa) == 0 &&
-				listId == student.listId &&
-				studentId.equals(student.studentId) &&
-				fullName.equals(student.fullName);
+		return Double.compare(student.gpa, gpa) == 0 && listId == student.listId && studentId.equals(student.studentId) && fullName.equals(student.fullName);
 	}
 }
