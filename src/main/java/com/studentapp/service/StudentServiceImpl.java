@@ -49,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		}
 		// if not found
-		throw new StudentNotFoundException("Student with ID " + studentId + " not found.");
+		throw new StudentNotFoundException("Student with ID " + studentListId + " not found.");
 	}
 
 	@Override
