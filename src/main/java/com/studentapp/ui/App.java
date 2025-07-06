@@ -37,7 +37,7 @@ public class App {
 
 		while (true) {
 			printMenu();
-			try {
+
 				int choice = scanner.nextInt();
 				scanner.nextLine(); // Consume the newline character
 
@@ -60,10 +60,7 @@ public class App {
 					default:
 						System.out.println("Invalid choice. Please enter a number between 1 and 5.");
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid input. Please enter a number.");
-				scanner.nextLine(); // Clear the invalid input
-			}
+
 			System.out.println("\nPress Enter to continue...");
 			scanner.nextLine();
 		}
@@ -106,10 +103,7 @@ public class App {
 		} catch (InputMismatchException e) {
 			System.out.println("Error: Invalid input type. Please check your values.");
 			scanner.nextLine(); // Clear buffer
-		} catch (DateTimeParseException e) {
-			System.out.println("Error: Invalid date format. Please use YYYY-MM-DD.");
-		}
-		catch (DuplicateStudentException | InvalidGPAException e) {
+		} catch (DuplicateStudentException | InvalidGPAException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
