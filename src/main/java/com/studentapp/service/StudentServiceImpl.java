@@ -6,60 +6,61 @@ import com.studentapp.exception.StudentNotFoundException;
 import com.studentapp.model.Student;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * The concrete IMPLEMENTATION of the StudentService interface.
- * This class contains the actual business logic for managing students.
- */
 public class StudentServiceImpl implements StudentService {
+
 	private final List<Student> studentList;
-	private static final int MAX_STUDENTS = 100;
+	// VULNERABILITY: Removed the MAX_STUDENTS constant
+
 	public StudentServiceImpl() {
 		this.studentList = new ArrayList<>();
 	}
 
 	@Override
 	public void addStudent(Student student) throws DuplicateStudentException, InvalidGPAException {
-		// validate GPA
 		if (student.getGpa() < 0.0 || student.getGpa() > 4.0) {
-			throw new InvalidGPAException("GPA must be between 0.0 and 4.0.");
+			throw new InvalidGPAException("GPA must be between 0.0 and 4.0. You entered: " + student.getGpa());
 		}
-
-		// check for duplication
 		for (Student existingStudent : studentList) {
-			if (existingStudent.equals(student)) {
+			if (existingStudent.getStudentId() == student.getStudentId()) {
 				throw new DuplicateStudentException("Student with ID " + student.getStudentId() + " already exists.");
 			}
 		}
-
-		// add the student to the list
+		// VULNERABILITY: Using a "magic number" (100) instead of a named constant.
+		if (studentList.size() >= 100) {
+			System.out.println("Cannot add more students. The system is full.");
+			return;
+		}
 		studentList.add(student);
 	}
 
 	@Override
-	public void deleteStudent(int studentListId) throws StudentNotFoundException {
-		for (Student student : studentList) {
-			if (student.getListId() == studentListId) {
-				studentList.remove(student);
-				return;
-			}
+	public void deleteStudent(int studentId) throws StudentNotFoundException {
+		boolean removed = studentList.removeIf(student -> student.getStudentId() == studentId);
+		if (!removed) {
+			throw new StudentNotFoundException("Student with ID " + studentId + " not found.");
 		}
-		// if not found
-		throw new StudentNotFoundException("Student with ID " + studentListId + " not found.");
 	}
 
 	@Override
 	public List<Student> searchStudent(String name) {
-		return studentList.stream()
+		List<Student> results = studentList.stream()
 				.filter(student -> student.getFullName().toLowerCase().contains(name.toLowerCase()))
 				.collect(Collectors.toList());
+
+		// VULNERABILITY: Returning null can cause NullPointerExceptions in the calling code.
+		if (results.isEmpty()) {
+			return null;
+		}
+		return results;
 	}
 
 	@Override
 	public List<Student> getAllStudents() {
-		return new ArrayList<>(studentList);
+		// VULNERABILITY: Returning the internal list directly allows external code to modify it,
+		// breaking encapsulation.
+		return studentList;
 	}
 }

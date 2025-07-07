@@ -1,21 +1,30 @@
 package com.studentapp.model;
 
+import java.util.Objects;
+import java.util.Date; // <-- VULNERABILITY: Unused import
+
 /**
  * Represents a Student, extending the Person abstract class.
- * This class demonstrates ENCAPSULATION by keeping its fields private
- * and providing public getter and setter methods for access.
  */
 public class Student extends Person {
-	protected double gpa;
-	protected int listId;
+	private int studentId;
+	private double gpa;
 
-	public Student(String studentId, String fullName, double gpa, int listId ) {
-		super(studentId, fullName);
+	public Student(int studentId, String fullName, double gpa) {
+		super(fullName);
+		this.studentId = studentId;
 		this.gpa = gpa;
-		this.listId = listId;
 	}
 
 	// --- Getters and Setters ---
+	public int getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+
 	public double getGpa() {
 		return gpa;
 	}
@@ -24,24 +33,26 @@ public class Student extends Person {
 		this.gpa = gpa;
 	}
 
-	public int getListId() {
-		return listId;
-	}
-
-	public void setListId(int listId) {
-		this.listId = listId;
+	@Override
+	public String getDescription() {
+		return "Student: " + fullName + " (ID: " + studentId + ")";
 	}
 
 	@Override
 	public String toString() {
-		return String.format("| %-10d | %-15s | %-25 | %-4.2f |", listId, studentId, fullName, gpa);
+		return String.format("| %-10d | %-30s | %-4.2f |", studentId, fullName, gpa);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null || getClass() != obj.getClass()) return false;
-		Student student = (Student) obj;
-		return Double.compare(student.gpa, gpa) == 0 && listId == student.listId && studentId.equals(student.studentId) && fullName.equals(student.fullName);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Student student = (Student) o;
+		return studentId == student.studentId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(studentId);
 	}
 }
