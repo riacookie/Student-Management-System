@@ -1,11 +1,11 @@
 package com.studentapp.model;
 
 import java.util.Objects;
-import java.util.Date; // <-- VULNERABILITY: Unused import
 
 public class Student extends Person {
 	private int studentId;
-	private double gpa;
+	// VULNERABILITY (Codacy): Public field. Fields should be private to enforce encapsulation.
+	public double gpa;
 
 	public Student(int studentId, String fullName, double gpa) {
 		super(fullName);
@@ -13,7 +13,6 @@ public class Student extends Person {
 		this.gpa = gpa;
 	}
 
-	// --- Getters and Setters ---
 	public int getStudentId() {
 		return studentId;
 	}

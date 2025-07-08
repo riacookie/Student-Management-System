@@ -11,19 +11,16 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * The main entry point for the application.
- */
 public class App {
 	private static final StudentService studentService = new StudentServiceImpl();
 	private static final Scanner scanner = new Scanner(System.in);
 
+	// VULNERABILITY (Codacy): High cyclomatic complexity. This method has too many execution paths.
 	public static void main(String[] args) {
 		try {
 			studentService.addStudent(new Student(101, "Vo Cao Minh", 3.8));
 			studentService.addStudent(new Student(102, "Le Thi Binh", 3.5));
-			studentService.addStudent(new Student(103, "Tran Van Dung", 2.1));
-		} catch (Exception e) { // VULNERABILITY: Catching generic Exception and using printStackTrace
+		} catch (Exception e) { // VULNERABILITY (Codacy): Catching a generic 'Exception' is too broad.
 			e.printStackTrace();
 		}
 
@@ -64,7 +61,7 @@ public class App {
 		try {
 			System.out.print("Enter Student ID: ");
 			int id = scanner.nextInt();
-			scanner.nextLine(); // Consume newline
+			scanner.nextLine();
 
 			System.out.print("Enter Full Name (max 50 chars): ");
 			String name = scanner.nextLine();
@@ -75,7 +72,7 @@ public class App {
 
 			System.out.print("Enter GPA (0.0 - 4.0): ");
 			double gpa = scanner.nextDouble();
-			scanner.nextLine(); // Consume newline
+			scanner.nextLine();
 
 			Student newStudent = new Student(id, name, gpa);
 			studentService.addStudent(newStudent);
@@ -83,7 +80,7 @@ public class App {
 
 		} catch (InputMismatchException e) {
 			System.out.println("Error: Invalid input type. Please check your values.");
-			scanner.nextLine(); // Clear buffer
+			scanner.nextLine();
 		} catch (DuplicateStudentException | InvalidGPAException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
@@ -93,31 +90,37 @@ public class App {
 		try {
 			System.out.print("Enter the ID of the student to delete: ");
 			int id = scanner.nextInt();
-			scanner.nextLine(); // Consume newline
+			scanner.nextLine();
 
 			studentService.deleteStudent(id);
 			System.out.println("Student with ID " + id + " deleted successfully.");
 
 		} catch (InputMismatchException e) {
 			System.out.println("Error: Invalid ID. Please enter a number.");
-			scanner.nextLine(); // Clear buffer
+			scanner.nextLine();
 		} catch (StudentNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
 
 	private static void searchStudentUI() {
-		System.out.print("Enter the name (or partial ndayame) to search for: ");
+		System.out.print("Enter the name (or partial name) to search for: ");
 		String name = scanner.nextLine();
 		List<Student> results = studentService.searchStudent(name);
 
-		// This line is now vulnerable to a NullPointerException if results is null
+		// This line is now vulnerable to a NullPointerException because searchStudent can return null
 		if (results == null || results.isEmpty()) {
 			System.out.println("No students found with that name.");
 		} else {
 			System.out.println("--- Search Results ---");
 			printStudentHeader();
-			results.forEach(System.out::println);
+			// VULNERABILITY (Codacy): Inefficient string concatenation in a loop.
+			// StringBuilder should be used instead.
+			String report = "";
+			for(Student s : results) {
+				report += s.toString() + "\n";
+			}
+			System.out.print(report);
 			printStudentFooter();
 		}
 	}

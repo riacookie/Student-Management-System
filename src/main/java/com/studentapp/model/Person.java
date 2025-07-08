@@ -1,8 +1,5 @@
 package com.studentapp.model;
 
-/**
- * Represents the abstract concept of a Person.
- */
 public abstract class Person {
 	protected String fullName;
 
