@@ -107,7 +107,7 @@ public class App {
 	}
 
 	private static void searchStudentUI() {
-		System.out.print("Enter the name (or partial name) to search for: ");
+		System.out.print("Enter the name (or partial ndayame) to search for: ");
 		String name = scanner.nextLine();
 		List<Student> results = studentService.searchStudent(name);
 

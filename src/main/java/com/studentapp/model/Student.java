@@ -3,9 +3,6 @@ package com.studentapp.model;
 import java.util.Objects;
 import java.util.Date; // <-- VULNERABILITY: Unused import
 
-/**
- * Represents a Student, extending the Person abstract class.
- */
 public class Student extends Person {
 	private int studentId;
 	private double gpa;

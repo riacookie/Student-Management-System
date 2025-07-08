@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 
 	private final List<Student> studentList;
-	// VULNERABILITY: Removed the MAX_STUDENTS constant
 
 	public StudentServiceImpl() {
 		this.studentList = new ArrayList<>();
@@ -28,7 +27,7 @@ public class StudentServiceImpl implements StudentService {
 				throw new DuplicateStudentException("Student with ID " + student.getStudentId() + " already exists.");
 			}
 		}
-		// VULNERABILITY: Using a "magic number" (100) instead of a named constant.
+		// VULNERABILITY: No limits
 		if (studentList.size() >= 100) {
 			System.out.println("Cannot add more students. The system is full.");
 			return;
