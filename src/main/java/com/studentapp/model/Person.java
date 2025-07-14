@@ -1,3 +1,4 @@
+// CODE BY VÕ CAO MINH - SE203168
 package com.studentapp.model;
 
 public abstract class Person {
@@ -6,6 +7,7 @@ public abstract class Person {
     public Person(String fullName) {
         this.fullName = fullName;
     }
+    // SE203168
 
     public String getFullName() {
         return fullName;

@@ -1,3 +1,4 @@
+// CODE BY VÕ CAO MINH - SE203168
 package com.studentapp.service;
 
 import com.studentapp.exception.DuplicateStudentException;
@@ -33,14 +34,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteStudent(int studentId) throws StudentNotFoundException {
-        try {
-            boolean removed = studentList.removeIf(student -> student.getStudentId() == studentId);
-            if (!removed) {
-                throw new StudentNotFoundException("Student with ID " + studentId + " not found.");
-            }
-        } catch (Exception e) {
-            // VULNERABILITY (Codacy): An empty catch block swallows the exception.
-            // Errors will go unnoticed, making debugging difficult.
+        boolean removed = studentList.removeIf(student -> student.getStudentId() == studentId);
+        if (!removed) {
+            throw new StudentNotFoundException("Student with ID " + studentId + " not found.");
         }
     }
 
@@ -50,10 +46,9 @@ public class StudentServiceImpl implements StudentService {
                 .filter(student -> student.getFullName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
 
-        // VULNERABILITY (Codacy/Snyk): Returning null for a collection is bad practice.
-        // This can cause NullPointerExceptions. Methods returning collections should return an empty collection instead.
+        // The check for empty results is still useful, but now we return a safe, empty list.
         if (results.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         return results;
     }

@@ -1,3 +1,4 @@
+// CODE BY VÕ CAO MINH - SE203168
 package com.studentapp.ui;
 
 import com.studentapp.exception.DuplicateStudentException;
@@ -12,16 +13,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
+    
     private static final StudentService studentService = new StudentServiceImpl();
+
     private static final Scanner scanner = new Scanner(System.in);
 
-    // VULNERABILITY (Codacy): High cyclomatic complexity. This method has too many execution paths.
     public static void main(String[] args) {
         try {
             studentService.addStudent(new Student(101, "Vo Cao Minh", 3.8));
             studentService.addStudent(new Student(102, "Le Thi Binh", 3.5));
-        } catch (Exception e) { // VULNERABILITY (Codacy): Catching a generic 'Exception' is too broad.
-            e.printStackTrace();
+        } catch (DuplicateStudentException | InvalidGPAException e) { // Catches only expected exceptions.
+            System.out.println("Error during initial setup: " + e.getMessage());
         }
 
         while (true) {

@@ -1,17 +1,20 @@
+// CODE BY VÕ CAO MINH - SE203168
 package com.studentapp.model;
 
 import java.util.Objects;
 
 public class Student extends Person {
+
     private int studentId;
-    // VULNERABILITY (Codacy): Public field. Fields should be private to enforce encapsulation.
-    public double gpa;
+
+    private double gpa;
 
     public Student(int studentId, String fullName, double gpa) {
         super(fullName);
         this.studentId = studentId;
         this.gpa = gpa;
     }
+    
 
     public int getStudentId() {
         return studentId;
